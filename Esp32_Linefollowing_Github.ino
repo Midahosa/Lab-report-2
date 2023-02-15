@@ -1,28 +1,27 @@
-// Define the sensor pins using their ESP32 GPIO numbers
-#define sensor1 2
-#define sensor2 0
-#define sensor3 4
-#define sensor4 14
-#define sensor5 27
-#define sensor6 26
-
 #include <Wire.h>  // includes library for I2C communication
+// Define the sensor pins using their ESP32 GPIO numbers
+#define sensor1 2 //Green wire
+#define sensor2 0 //pink wire
+#define sensor3 4 //orange wire
+#define sensor4 14 //white wire
+#define sensor5 27 //yellow wire
+#define sensor6 26 //purple wire
+
 
 // Define variables
-int temp, dir, newdir; 
-int counter;
-int datasend;
 float servoangle,difference1,difference2,inter,dif;
 float temper=0;
-
+int temp, DR, NDR; 
+int counter;
+int datasend;
 void setup() {
   Serial.begin(9600);  // begin serial communication
   while(!Serial) {}    // wait for Serial to become ready
   
-  /* Start the I2C bus */
+  // Start the I2C bus 
   Wire.begin();
   Wire.setClock(400000);
-  /* I2C bus, 0x68 address */
+  // I2C bus, 0x68 address 
   counter = 0;
 }
 
@@ -53,9 +52,9 @@ void loop() {
   dif = (difference2-difference1)/0.001;  // calculate the gradient
   servoangle = 3.2*(10-difference2) + 0.32*inter + 0.02*dif;  // sum the difference, integration, and gradient
 
-  if(dir != newdir)
+  if(DR != NDR)
   {
-    dir = newdir;
+    DR = NDR;
     inter = 0;  // reset the integration value
   }
 
@@ -88,11 +87,11 @@ else
    temp = servoangle;
    if(temp<56)
    {
-     newdir = 0;
+     NDR = 0;
    }
     if(temp>56)
    {
-     newdir = 1;
+     NDR = 1;
    }
 }
 
